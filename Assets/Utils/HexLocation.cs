@@ -1,10 +1,10 @@
 
 public class HexLocation
 {
-	public HexLocation (int startingX, int startingY)
+	public HexLocation (int startingX, int startingZ)
 	{
 		this.x = startingX;
-		this.y = startingY;
+		this.z = startingZ;
 	}
 
 	public int x
@@ -13,7 +13,7 @@ public class HexLocation
 		set;
 	}
 
-	public int y
+	public int z
 	{
 		get;
 		set;
