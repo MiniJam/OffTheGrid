@@ -37,16 +37,7 @@ public class BoardManager : MonoBehaviour
 		initialTile.transform.parent = this.transform;
 		SetCurrentHex (initialTile);
 
-		Vector3 initialPosition = initialTile.transform.position;
-		for (BOARD_DIRECTION direction = BOARD_DIRECTION.NORTH;
-		     direction != BOARD_DIRECTION.MAX_DIRECTIONS;
-		     ++direction)
-		{
-			GameObject newTile = Instantiate(_emptyGridPrefab) as GameObject;
-			Vector3 newPosition = CalculateGridOffset(initialPosition, direction);
-			newTile.transform.position = newPosition;
-			newTile.transform.parent = this.transform;
-		}
+		GenerateBoardAroundTile(initialTile);
 	}
 	
 	// Update is called once per frame
@@ -61,6 +52,22 @@ public class BoardManager : MonoBehaviour
 				GameObject touchedObject = hitInfo.collider.gameObject;
 				SetCurrentHex(touchedObject);
 			}
+		}
+	}
+
+	void GenerateBoardAroundTile(GameObject tile)
+	{
+		Vector3 initialPosition = tile.transform.position;
+		for (BOARD_DIRECTION direction = BOARD_DIRECTION.NORTH;
+		     direction != BOARD_DIRECTION.MAX_DIRECTIONS;
+	     	 ++direction)
+		{
+			Vector3 newPosition = CalculateGridOffset (initialPosition, direction);
+
+			//TODO check if tile exists
+			GameObject newTile = Instantiate (_emptyGridPrefab) as GameObject;
+			newTile.transform.position = newPosition;
+			newTile.transform.parent = this.transform;
 		}
 	}
 
@@ -80,6 +87,7 @@ public class BoardManager : MonoBehaviour
 		if (_currentHex != null)
 		{
 			_currentHex.AddComponent(typeof(AlphaBlinkScript));
+			GenerateBoardAroundTile (_currentHex);
 		}
 	}
 
