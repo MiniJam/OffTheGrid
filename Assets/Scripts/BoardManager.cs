@@ -167,10 +167,21 @@ public class BoardManager : MonoBehaviour
 			}
 		}
 
-		float fov = Camera.main.fieldOfView;
-		fov += Input.GetAxis("Mouse ScrollWheel") * -20;
-		fov = Mathf.Clamp (fov, 50, 100);
-		Camera.main.fieldOfView = fov;
+		if (Camera.main.isOrthoGraphic) 
+		{
+			float orthoSize = Camera.main.orthographicSize;
+			orthoSize += Input.GetAxis("Mouse ScrollWheel");
+			orthoSize = Mathf.Clamp(orthoSize, 2, 10);
+			Camera.main.orthographicSize = orthoSize;
+		}
+		else
+		{
+			float fov = Camera.main.fieldOfView;
+			fov += Input.GetAxis("Mouse ScrollWheel") * -20;
+			fov = Mathf.Clamp (fov, 50, 100);
+			Camera.main.fieldOfView = fov;
+		}
+
 	}
 }
 
