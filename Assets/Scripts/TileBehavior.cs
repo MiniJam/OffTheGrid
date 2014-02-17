@@ -34,6 +34,7 @@ public class TileBehavior : MonoBehaviour
 
 		_TileData.revealed = true;
 		Destroy(_visualization);
+		//Debug.Log ("Destroyed vis");
 
 		_visualization = newVis;
 		newVis.transform.parent = this.transform;

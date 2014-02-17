@@ -114,6 +114,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _emptyGridPrefab: {fileID: 100008, guid: 3ad5334f44758bf4583293f00bfdf04a, type: 2}
   _cityGridPrefab: {fileID: 100000, guid: 2c397ec8106b7234c9b9d33d07625f78, type: 2}
+  _cityGridVisualization: {fileID: 100004, guid: 046b0d6355fabd640a5e822725f1a444,
+    type: 2}
   _currentHex: {fileID: 0}
 --- !u!1 &437027433
 GameObject:

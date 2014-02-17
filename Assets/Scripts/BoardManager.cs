@@ -112,7 +112,7 @@ public class BoardManager : MonoBehaviour
 	{
 		if (_currentHex != null)
 		{
-			Component blink = _currentHex.GetComponent(typeof(TileBorderBlinkScript));
+			TileBorderBlinkScript blink = _currentHex.GetComponent<TileBorderBlinkScript>();
 			if (blink != null)
 			{
 				Destroy(blink);
