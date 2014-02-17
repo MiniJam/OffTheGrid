@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class BoardManager : MonoBehaviour 
 {
-	private const float X_OFFSET = 3.5f;
-	private const float Z_OFFSET = 2.0f;
+	private const float X_OFFSET = 0.866f;
+	private const float Z_OFFSET = 0.5f;
 	public GameObject _emptyGridPrefab;
 	public GameBoard _gameBoard;
 	public GameObject _currentHex;
@@ -88,7 +88,7 @@ public class BoardManager : MonoBehaviour
 	{
 		if (_currentHex != null)
 		{
-			Component blink = _currentHex.GetComponent(typeof(AlphaBlinkScript));
+			Component blink = _currentHex.GetComponent(typeof(TileBorderBlinkScript));
 			if (blink != null)
 			{
 				Destroy(blink);
@@ -99,9 +99,11 @@ public class BoardManager : MonoBehaviour
 
 		if (_currentHex != null)
 		{
-			_currentHex.AddComponent(typeof(AlphaBlinkScript));
+			_currentHex.AddComponent(typeof(TileBorderBlinkScript));
+
 			TileBehavior tileBehavior = _currentHex.GetComponent<TileBehavior>();
-			if (tileBehavior != null) {
+			if (tileBehavior != null)
+			{
 				GenerateBoardAroundTile(tileBehavior._TileData.location);
 			}
 		}

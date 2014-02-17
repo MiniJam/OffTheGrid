@@ -4,6 +4,7 @@ using System.Collections;
 public class TileBehavior : MonoBehaviour
 {
 	public GameTile _TileData;
+	public Renderer borderRenderer;
 
 	void Awake()
 	{
