@@ -113,7 +113,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _emptyGridPrefab: {fileID: 100000, guid: 2c397ec8106b7234c9b9d33d07625f78, type: 2}
-  _tiles: []
   _currentHex: {fileID: 0}
 --- !u!1 &437027433
 GameObject:
