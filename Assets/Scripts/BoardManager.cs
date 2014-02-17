@@ -7,8 +7,12 @@ public class BoardManager : MonoBehaviour
 	private const float X_OFFSET = 0.866f;
 	private const float Z_OFFSET = 0.5f;
 	public GameObject _emptyGridPrefab;
+	public GameObject _cityGridPrefab;
+	public GameObject _cityGridVisualization;
 	public GameBoard _gameBoard;
 	public GameObject _currentHex;
+
+	bool initialGridGenerated;
 
 	void Awake()
 	{
@@ -19,7 +23,7 @@ public class BoardManager : MonoBehaviour
 	void Start ()
 	{
 		// generate empty tiles 5 deep around the starting location
-		GameObject initialTile = Instantiate (_emptyGridPrefab) as GameObject;
+		GameObject initialTile = Instantiate (_cityGridPrefab) as GameObject;
 		_gameBoard.SetTileAt(new HexLocation(0,0), initialTile);
 		initialTile.transform.parent = this.transform;
 		SetCurrentHex (initialTile);
@@ -44,43 +48,63 @@ public class BoardManager : MonoBehaviour
 		}
 		ProcessCameraMove ();
 	}
-
-	void GenerateBoardAroundTile(GameObject tile)
-	{
-		Vector3 initialPosition = tile.transform.position;
-		for (BOARD_DIRECTION direction = BOARD_DIRECTION.NORTH;
-		     direction != BOARD_DIRECTION.MAX_DIRECTIONS;
-	     	 ++direction)
-		{
-			Vector3 newPosition = CalculateGridOffset (initialPosition, direction);
-
-			//TODO check if tile exists
-			GameObject newTile = Instantiate (_emptyGridPrefab) as GameObject;
-			//HexLocation location = _gameBoard.GetLocationForAdjacentTile(
-			//_gameBoard.SetTileAt(new HexLocation(,), newTile);
-			newTile.transform.position = newPosition;
-			newTile.transform.parent = this.transform;
-		}
-	}
-
+	
 	void GenerateBoardAroundTile(HexLocation location) {
+		List<HexLocation> newLocations = new List<HexLocation>();
+
 		for (BOARD_DIRECTION direction = BOARD_DIRECTION.NORTH;
 		     direction != BOARD_DIRECTION.MAX_DIRECTIONS;
 		     ++direction)
 		{
-			if (_gameBoard.GetAdjacentTile(location, direction) != null) 
+			HexLocation newLocation = _gameBoard.GetLocationForAdjacentTile(location, direction);
+			newLocations.Add(newLocation);
+
+			GameObject adjTile = _gameBoard.GetAdjacentTile(location, direction);
+			if (adjTile != null) 
 			{
+				var adjTileBehavior = adjTile.GetComponent<TileBehavior>();
+				if (adjTileBehavior.revealed == false) {
+					GameObject newVis = Instantiate(_cityGridVisualization) as GameObject;
+					adjTileBehavior.RevealTile(newVis);
+				}
 				continue;
 			}
 
-			HexLocation newLocation = _gameBoard.GetLocationForAdjacentTile(location, direction);
-			GameObject newTile = Instantiate(_emptyGridPrefab) as GameObject;
+			GameObject newTile = Instantiate(_cityGridPrefab) as GameObject;
 			newTile.transform.parent = this.transform;
 			newTile.transform.position = PositionForHexLocation(newLocation);
 			_gameBoard.SetTileAt(newLocation, newTile);
 			TileBehavior newTileBehavior = newTile.GetComponent<TileBehavior>();
 			if (newTileBehavior != null) {
 				newTileBehavior._TileData.location = newLocation;
+			}
+		}
+
+		foreach (HexLocation loc in newLocations) {
+			for (BOARD_DIRECTION direction = BOARD_DIRECTION.NORTH;
+			     direction != BOARD_DIRECTION.MAX_DIRECTIONS;
+			     ++direction)
+			{
+				GameObject adjTile = _gameBoard.GetAdjacentTile(location, direction);
+				if (adjTile != null) 
+				{
+					var adjTileBehavior = adjTile.GetComponent<TileBehavior>();
+					if (adjTileBehavior.revealed == false) {
+						GameObject newVis = Instantiate(_cityGridVisualization) as GameObject;
+						adjTileBehavior.RevealTile(newVis);
+					}
+					continue;
+				}
+				
+				HexLocation newLocation = _gameBoard.GetLocationForAdjacentTile(loc, direction);
+				GameObject newTile = Instantiate(_emptyGridPrefab) as GameObject;
+				newTile.transform.parent = this.transform;
+				newTile.transform.position = PositionForHexLocation(newLocation);
+				_gameBoard.SetTileAt(newLocation, newTile);
+				TileBehavior newTileBehavior = newTile.GetComponent<TileBehavior>();
+				if (newTileBehavior != null) {
+					newTileBehavior._TileData.location = newLocation;
+				}
 			}
 		}
 	}
@@ -170,7 +194,7 @@ public class BoardManager : MonoBehaviour
 		if (Camera.main.isOrthoGraphic) 
 		{
 			float orthoSize = Camera.main.orthographicSize;
-			orthoSize += Input.GetAxis("Mouse ScrollWheel");
+			orthoSize += Input.GetAxis("Mouse ScrollWheel") * -1;
 			orthoSize = Mathf.Clamp(orthoSize, 2, 10);
 			Camera.main.orthographicSize = orthoSize;
 		}
