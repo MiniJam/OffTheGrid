@@ -7,12 +7,12 @@ public class BoardManager : MonoBehaviour
 	private const float X_OFFSET = 3.5f;
 	private const float Z_OFFSET = 2.0f;
 	public GameObject _emptyGridPrefab;
-	public List<GameObject> _tiles = new List<GameObject>();
+	public GameBoard _gameBoard;
 	public GameObject _currentHex;
 
 	void Awake()
 	{
-
+		_gameBoard = new GameBoard();
 	}
 
 	// Use this for initialization
@@ -20,11 +20,9 @@ public class BoardManager : MonoBehaviour
 	{
 		// generate empty tiles 5 deep around the starting location
 		GameObject initialTile = Instantiate (_emptyGridPrefab) as GameObject;
-		_tiles.Add (initialTile);
+		_gameBoard.SetTileAt(new HexLocation(0,0), initialTile);
 		initialTile.transform.parent = this.transform;
 		SetCurrentHex (initialTile);
-
-		GenerateBoardAroundTile(initialTile);
 	}
 	
 	// Update is called once per frame
@@ -37,11 +35,15 @@ public class BoardManager : MonoBehaviour
 			if (Physics.Raycast(touchTestRay, out hitInfo))
 			{
 				GameObject touchedObject = hitInfo.collider.gameObject;
-				SetCurrentHex(touchedObject);
+				TileBehavior tile = touchedObject.GetComponent<TileBehavior>();
+				if (null != tile) 
+				{
+					SetCurrentHex(touchedObject);
+				}
 			}
-		}
 
-		ProcessCameraMove ();
+			ProcessCameraMove ();
+		}
 	}
 
 	void GenerateBoardAroundTile(GameObject tile)
@@ -55,8 +57,32 @@ public class BoardManager : MonoBehaviour
 
 			//TODO check if tile exists
 			GameObject newTile = Instantiate (_emptyGridPrefab) as GameObject;
+			//HexLocation location = _gameBoard.GetLocationForAdjacentTile(
+			//_gameBoard.SetTileAt(new HexLocation(,), newTile);
 			newTile.transform.position = newPosition;
 			newTile.transform.parent = this.transform;
+		}
+	}
+
+	void GenerateBoardAroundTile(HexLocation location) {
+		for (BOARD_DIRECTION direction = BOARD_DIRECTION.NORTH;
+		     direction != BOARD_DIRECTION.MAX_DIRECTIONS;
+		     ++direction)
+		{
+			if (_gameBoard.GetAdjacentTile(location, direction) != null) 
+			{
+				continue;
+			}
+
+			HexLocation newLocation = _gameBoard.GetLocationForAdjacentTile(location, direction);
+			GameObject newTile = Instantiate(_emptyGridPrefab) as GameObject;
+			newTile.transform.parent = this.transform;
+			newTile.transform.position = PositionForHexLocation(newLocation);
+			_gameBoard.SetTileAt(newLocation, newTile);
+			TileBehavior newTileBehavior = newTile.GetComponent<TileBehavior>();
+			if (newTileBehavior != null) {
+				newTileBehavior._TileData.location = newLocation;
+			}
 		}
 	}
 
@@ -76,11 +102,14 @@ public class BoardManager : MonoBehaviour
 		if (_currentHex != null)
 		{
 			_currentHex.AddComponent(typeof(AlphaBlinkScript));
-			GenerateBoardAroundTile (_currentHex);
+			TileBehavior tileBehavior = _currentHex.GetComponent<TileBehavior>();
+			if (tileBehavior != null) {
+				GenerateBoardAroundTile(tileBehavior._TileData.location);
+			}
 		}
 	}
 
-	Vector3 CalculateGridOffset(Vector3 startingOffset, BoardManager.BOARD_DIRECTION direction)
+	Vector3 CalculateGridOffset(Vector3 startingOffset, BOARD_DIRECTION direction)
 	{
 		switch (direction)
 		{
@@ -108,6 +137,18 @@ public class BoardManager : MonoBehaviour
 			break;
 		}
 		return startingOffset;
+	}
+
+	Vector3 PositionForHexLocation(HexLocation location) {
+		Vector3 pos = new Vector3();
+		pos.x = X_OFFSET * location.x;
+		pos.z = 2 * Z_OFFSET * location.z;
+		if (location.x % 2 != 0) 
+		{
+			pos.z += Z_OFFSET;
+		}
+
+		return pos;
 	}
 
 	void ProcessCameraMove ()

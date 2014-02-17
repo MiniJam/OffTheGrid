@@ -7,6 +7,7 @@ public class TileBehavior : MonoBehaviour
 
 	void Awake()
 	{
+		_TileData = new GameTile();
 	}
 
 	// Use this for initialization
