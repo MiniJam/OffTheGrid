@@ -84,17 +84,12 @@ public class BoardManager : MonoBehaviour
 			     direction != BOARD_DIRECTION.MAX_DIRECTIONS;
 			     ++direction)
 			{
-				GameObject adjTile = _gameBoard.GetAdjacentTile(location, direction);
+				GameObject adjTile = _gameBoard.GetAdjacentTile(loc, direction);
 				if (adjTile != null) 
 				{
-					var adjTileBehavior = adjTile.GetComponent<TileBehavior>();
-					if (adjTileBehavior.revealed == false) {
-						GameObject newVis = Instantiate(_cityGridVisualization) as GameObject;
-						adjTileBehavior.RevealTile(newVis);
-					}
 					continue;
 				}
-				
+
 				HexLocation newLocation = _gameBoard.GetLocationForAdjacentTile(loc, direction);
 				GameObject newTile = Instantiate(_emptyGridPrefab) as GameObject;
 				newTile.transform.parent = this.transform;
