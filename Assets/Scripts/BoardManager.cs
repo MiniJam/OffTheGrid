@@ -41,9 +41,8 @@ public class BoardManager : MonoBehaviour
 					SetCurrentHex(touchedObject);
 				}
 			}
-
-			ProcessCameraMove ();
 		}
+		ProcessCameraMove ();
 	}
 
 	void GenerateBoardAroundTile(GameObject tile)
@@ -161,7 +160,7 @@ public class BoardManager : MonoBehaviour
 			{
 				Vector3 position = Camera.current.transform.position;
 				position.x = Mathf.Clamp(position.x + horizontalAxis, -30, 30);
-				position.z = Mathf.Clamp(position.z + verticalAxis, -60, 0);
+				position.z = Mathf.Clamp(position.z + verticalAxis, -30, 30);
 				Camera.current.transform.position = position;
 			}
 		}
