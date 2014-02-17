@@ -6,19 +6,6 @@ public class BoardManager : MonoBehaviour
 {
 	private const float X_OFFSET = 3.5f;
 	private const float Z_OFFSET = 2.0f;
-
-	public enum BOARD_DIRECTION
-	{
-		DIRECTION_NOT_SET = 0,
-		NORTH = 1,
-		NORTH_EAST = 2,
-		SOUTH_EAST = 3,
-		SOUTH = 4,
-		SOUTH_WEST = 5,
-		NORTH_WEST = 6,
-		MAX_DIRECTIONS
-	}
-
 	public GameObject _emptyGridPrefab;
 	public List<GameObject> _tiles = new List<GameObject>();
 	public GameObject _currentHex;
