@@ -165,10 +165,13 @@ public class BoardManager : MonoBehaviour
 			}
 		}
 
-		float fov = Camera.main.fieldOfView;
-		fov += Input.GetAxis("Mouse ScrollWheel") * -20;
-		fov = Mathf.Clamp (fov, 50, 100);
-		Camera.main.fieldOfView = fov;
+		if (Input.GetAxis ("Mouse ScrollWheel") != 0)
+		{
+			float fov = Camera.main.fieldOfView;
+			fov += Input.GetAxis ("Mouse ScrollWheel") * -20;
+			fov = Mathf.Clamp (fov, 50, 100);
+			Camera.main.fieldOfView = fov;
+		}
 	}
 }
 
