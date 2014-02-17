@@ -16,7 +16,7 @@ public class MainMenuBehavior : MonoBehaviour {
 			RaycastHit hitInfo;
 			if (Physics.Raycast(touchTestRay, out hitInfo))
 			{
-				GameObject touchedObject = hitInfo.collider.gameObject;
+				//GameObject touchedObject = hitInfo.collider.gameObject;
 
 			}
 		}

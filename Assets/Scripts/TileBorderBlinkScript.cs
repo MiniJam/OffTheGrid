@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AlphaBlinkScript : MonoBehaviour
+public class TileBorderBlinkScript : MonoBehaviour
 {
+	public Renderer _borderRenderer;
 	public Color _currentColor;
 	private bool _isAlphaShrinking = true;
 	private const float MIN_ALPHA = 0.50f;
@@ -11,9 +12,10 @@ public class AlphaBlinkScript : MonoBehaviour
 	
 	void Awake()
 	{
-		_currentColor = renderer.material.color;
+		_borderRenderer = GetComponent<TileBehavior>().borderRenderer;
+		_currentColor = _borderRenderer.material.color;
 	}
-	
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -22,7 +24,7 @@ public class AlphaBlinkScript : MonoBehaviour
 	void OnDestroy()
 	{
 		_currentColor.a = MAX_ALPHA;
-		renderer.material.color = _currentColor;
+		_borderRenderer.material.color = _currentColor;
 	}
 	
 	// Update is called once per frame
@@ -53,6 +55,6 @@ public class AlphaBlinkScript : MonoBehaviour
 			}
 		}
 		
-		renderer.material.color = _currentColor;
+		_borderRenderer.material.color = _currentColor;
 	}
 }
