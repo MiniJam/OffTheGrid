@@ -28,7 +28,7 @@ public class CameraManager : MonoBehaviour
         if (Camera.main.isOrthoGraphic)
         {
             float orthoSize = Camera.main.orthographicSize;
-            orthoSize += Input.GetAxis("Mouse ScrollWheel");
+            orthoSize -= Input.GetAxis("Mouse ScrollWheel");
             orthoSize = Mathf.Clamp(orthoSize, 2, 10);
             Camera.main.orthographicSize = orthoSize;
         }
