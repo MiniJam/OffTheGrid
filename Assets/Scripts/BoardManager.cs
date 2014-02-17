@@ -42,7 +42,6 @@ public class BoardManager : MonoBehaviour
 				}
 			}
 		}
-		ProcessCameraMove ();
 	}
 
 	void GenerateBoardAroundTile(GameObject tile)
@@ -150,38 +149,6 @@ public class BoardManager : MonoBehaviour
 		}
 
 		return pos;
-	}
-
-	void ProcessCameraMove ()
-	{
-		if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow)) 
-		{
-			float horizontalAxis = Input.GetAxis("Horizontal");
-			float verticalAxis = Input.GetAxis("Vertical");
-			if(Camera.current != null)
-			{
-				Vector3 position = Camera.current.transform.position;
-				position.x = Mathf.Clamp(position.x + horizontalAxis, -30, 30);
-				position.z = Mathf.Clamp(position.z + verticalAxis, -30, 30);
-				Camera.current.transform.position = position;
-			}
-		}
-
-		if (Camera.main.isOrthoGraphic) 
-		{
-			float orthoSize = Camera.main.orthographicSize;
-			orthoSize += Input.GetAxis("Mouse ScrollWheel");
-			orthoSize = Mathf.Clamp(orthoSize, 2, 10);
-			Camera.main.orthographicSize = orthoSize;
-		}
-		else
-		{
-			float fov = Camera.main.fieldOfView;
-			fov += Input.GetAxis("Mouse ScrollWheel") * -20;
-			fov = Mathf.Clamp (fov, 50, 100);
-			Camera.main.fieldOfView = fov;
-		}
-
 	}
 }
 
