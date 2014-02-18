@@ -6,17 +6,20 @@ public class BoardManager : MonoBehaviour
 {
 	private const float X_OFFSET = 0.866f;
 	private const float Z_OFFSET = 0.5f;
+
 	public GameObject _emptyGridPrefab;
 	public GameObject _cityGridPrefab;
 	public GameObject _cityGridVisualization;
 	public GameBoard _gameBoard;
 	public GameObject _currentHex;
+	public GestureDetector _gestureDetector;
 
 	bool initialGridGenerated;
 
 	void Awake()
 	{
 		_gameBoard = new GameBoard();
+		_gestureDetector = new GestureDetector();
 	}
 
 	// Use this for initialization
@@ -32,7 +35,8 @@ public class BoardManager : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		if (Input.GetMouseButtonUp (0))
+		_gestureDetector.Update();
+		if (_gestureDetector.IsClick())
 		{
 			Ray touchTestRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hitInfo;
@@ -47,6 +51,8 @@ public class BoardManager : MonoBehaviour
 			}
 		}
 	}
+
+
 	
 	void GenerateBoardAroundTile(HexLocation location) {
 		List<HexLocation> newLocations = new List<HexLocation>();
