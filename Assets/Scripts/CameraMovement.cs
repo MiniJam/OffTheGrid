@@ -19,8 +19,8 @@ public class CameraMovement : MonoBehaviour
             if (Camera.current != null)
             {
                 Vector3 position = Camera.current.transform.position;
-                position.x = Mathf.Clamp(position.x + horizontalAxis, -10, 10);
-                position.z = Mathf.Clamp(position.z + verticalAxis, -10, 10);
+				position.x = Mathf.Clamp(position.x + horizontalAxis * 0.5f, -10, 10);
+				position.z = Mathf.Clamp(position.z + verticalAxis * 0.5f, -10, 10);
                 Camera.current.transform.position = position;
             }
         }
