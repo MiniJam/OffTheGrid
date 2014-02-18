@@ -49,8 +49,8 @@ public class CameraMovement : MonoBehaviour
 			float verticalAxis = Input.GetAxis("Vertical");
 
 			Vector3 position = Camera.main.transform.position;
-			position.x = Mathf.Clamp(position.x + horizontalAxis, -10, 10);
-			position.z = Mathf.Clamp(position.z + verticalAxis, -10, 10);
+			position.x = Mathf.Clamp(position.x + horizontalAxis * 0.5f, -10, 10);
+			position.z = Mathf.Clamp(position.z + verticalAxis * 0.5f, -10, 10);
 			Camera.main.transform.position = position;
 		}
 

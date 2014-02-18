@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class BoardManager : MonoBehaviour 
 {
-	private const float X_OFFSET = 0.866f;
-	private const float Z_OFFSET = 0.5f;
+	private const float X_OFFSET = 0.864f;  // 0.866f
+	private const float Z_OFFSET = 0.499f; // 0.5f
 
 	public GameObject _emptyGridPrefab;
 	public GameObject _cityGridPrefab;
